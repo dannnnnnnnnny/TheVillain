@@ -1,0 +1,1 @@
+{"name":"villain-fear-begins","version":"1.0.0","private":true,"type":"module","scripts":{"start":"node scripts/serve.mjs","test":"node --test","build":"node scripts/build.mjs","deploy":"npm run build && wrangler deploy"},"engines":{"node":">=22"},"devDependencies":{"wrangler":"^4.156.2"}}
