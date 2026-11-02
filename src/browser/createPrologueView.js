@@ -12,14 +12,17 @@ export function createPrologueView(root,{onNext,onSkip}){
  image.addEventListener('error',()=>{root.dataset.artState='error';image.hidden=true;});
  return {hide(){root.hidden=true;phase=null;},show(screen){
   if(phase===screen&&!root.hidden)return;phase=screen;root.hidden=false;root.dataset.phase=screen;root.dataset.artState='loading';image.hidden=false;
-  image.onload=()=>{root.dataset.artState='ready';};
-  image.src='/public/assets/porto-peace.png';
-  image.alt='평화로운 포르투, 랜드마크에서 사진을 찍는 시민과 관광객';
-  title.textContent=story.title;
-  body.textContent=story.body;
-  root.querySelector('#prologue-thought').textContent=story.thought;
-  root.querySelector('#prologue-signal').textContent=story.signal;
-  root.querySelector('#prologue-step').textContent='A DAY IN PORTO · 첫 침공 프롤로그';
+  const beat=story[screen];
+  root.querySelector('#wakeup-panel').hidden=screen!=='waking';
+  image.hidden=screen==='waking';
+  if(screen==='peace'){
+   image.onload=()=>{root.dataset.artState='ready';};image.src='/public/assets/porto-peace.png';
+   image.alt='평화로운 포르투, 랜드마크에서 사진을 찍는 시민과 관광객';
+  }
+  title.textContent=beat.title;body.textContent=beat.body;
+  root.querySelector('#prologue-thought').textContent=beat.thought;
+  root.querySelector('#prologue-caption').textContent=beat.caption;
+  root.querySelector('#prologue-step').textContent=screen==='waking'?'01 / 02 · JUST ANOTHER MORNING':'02 / 02 · A WALK IN PORTO';
   next.textContent='이야기 계속 →';root.querySelector('#prologue-skip').textContent='이야기 건너뛰기';next.focus({preventScroll:true});
  }};
 }

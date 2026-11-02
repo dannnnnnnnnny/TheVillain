@@ -1,6 +1,6 @@
 export function createOpeningBroadcast(game){
  const {city,location,channel}=game.stage;
- return {kind:'opening',headline:`${city} 상공, 정체불명의 괴생명체 접근`,eyebrow:`${channel} · 긴급 속보`,body:`${city} 상공에서 정체불명의 괴생명체가 날아오고 있습니다. 시민 여러분은 즉시 안전한 곳으로 대피해 주십시오.`,perspective:'괴생명체…? 화면 속 저 모습이… 나라고?',caption:'첫 침공 프롤로그 · 실제 시작 전장',button:'현장으로 →',location};
+ return {kind:'opening',headline:`${city} 도심, 보라색 괴생명체 출현`,eyebrow:`${channel} · 긴급 속보`,body:`${city} 도심에서 거대한 보라색 괴생명체가 목격됐습니다. 방위군이 현장에 진입하고 있습니다. 시민 여러분은 즉시 안전한 곳으로 대피해 주십시오.`,perspective:'보라색 괴생명체…? 난 그냥 산책 나온 건데. 잠깐, 저게 나라고?',caption:'첫 침공 프롤로그 · 실제 시작 전장',button:'현장으로 →',location};
 }
 export function createEndingBroadcast(game){
  const {city,location,channel}=game.stage,buildings=game.buildings;

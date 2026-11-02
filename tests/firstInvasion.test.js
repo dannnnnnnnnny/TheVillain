@@ -4,17 +4,23 @@ import {createFirstInvasionStory} from '../src/game/firstInvasion.js';
 import {createOpeningBroadcast} from '../src/game/broadcast.js';
 import {createGame} from '../src/game/createGame.js';
 import {createBroadcastFlow} from '../src/browser/createBroadcastFlow.js';
-test('first-person mystery preserves peaceful tourists and explains a way home without naming the protagonist evil',()=>{
+import {hitPlayer} from '../src/game/combat.js';
+test('ordinary wakeup and upstairs noise lead to a peaceful first-person walk without revealing identity',()=>{
  const story=createFirstInvasionStory();
- assert.match(story.thought,/나는|내가|돌아가/);assert.match(story.body,/시민/);assert.match(story.body,/사진/);
- const beforeNews=[story.title,story.body,story.thought,story.signal].join(' ');
- assert.doesNotMatch(beforeNews,/악마|빌런|악당|괴생명체|공포를|흉터|파괴/);
- assert.match(story.signal,/클레리구스 탑/);assert.match(story.signal,/포르투 시청사/);assert.match(story.signal,/두 봉인/);assert.match(story.signal,/귀환 균열/);
+ assert.match(story.waking.title,/아침/);assert.match(story.waking.body,/위층/);assert.match(story.waking.thought,/아… 또 시끄럽네.*산책/);
+ assert.match(story.peace.body,/시민/);assert.match(story.peace.body,/사진/);assert.match(story.peace.thought,/산책/);
+ const beforeNews=JSON.stringify([story.waking,story.peace]);
+ assert.doesNotMatch(beforeNews,/악마|빌런|악당|괴생명체|봉인|균열|귀환|파괴/);
 });
-test('news reveals the player perspective before gameplay and goals explain the two real destruction targets',()=>{
+test('waking then city walk precede news identity reveal and player-controlled destruction rationale',()=>{
  const game=createGame(),flow=createBroadcastFlow(game,{initialScreen:'map'});flow.selectCountry('PRT');
- assert.equal(flow.screen,'peace');assert.equal(game.elapsed,0);flow.continue();assert.equal(flow.screen,'opening');
- const news=createOpeningBroadcast(game);assert.match(news.body,/괴생명체/);assert.match(news.perspective,/화면.*나/);
- const story=createFirstInvasionStory();assert.match(story.mission,/두 랜드마크/);assert.match(story.mission,/봉인/);assert.match(story.mission,/돌아/);
+ assert.equal(flow.screen,'waking');flow.continue();assert.equal(flow.screen,'peace');assert.equal(game.elapsed,0);flow.continue();assert.equal(flow.screen,'opening');
+ const news=createOpeningBroadcast(game);assert.match(news.body,/보라색 괴생명체/);assert.match(news.perspective,/나/);
+ const story=createFirstInvasionStory();assert.match(story.mission,/두 랜드마크/);assert.match(story.mission,/방위군/);assert.doesNotMatch(story.mission,/봉인|균열|귀환/);
  flow.continue();assert.equal(game.phase,'active');assert.equal(game.elapsed,0);
+});
+test('first genuine combat damage provokes anger once without damaging any buildings or changing control',()=>{
+ const game=createGame(),flow=createBroadcastFlow(game);const before=game.player.hp;assert.equal(flow.noticeDamage(before),false);flow.continue();assert.equal(flow.noticeDamage(before),false);
+ const buildings=JSON.stringify(game.buildings);hitPlayer(game,30);assert.ok(game.player.hp<before);assert.equal(flow.noticeDamage(before),true);assert.equal(flow.angered,true);assert.equal(JSON.stringify(game.buildings),buildings);assert.equal(game.phase,'active');assert.equal(flow.noticeDamage(before),false);
+ const retry=createGame(),next=createBroadcastFlow(retry);next.continue();const hp=retry.player.hp;hitPlayer(retry,30);assert.equal(next.noticeDamage(hp),true);
 });

@@ -1,5 +1,12 @@
 # Third-party source notices
 
+## NeoDunggeunmo pixel font
+
+- Official project: https://github.com/neodgm/neodgm, release v1.601.
+- Unmodified webfont: `public/assets/fonts/neodgm.woff2`.
+- Copyright (c) 2017–2021 Eunbin Jeong (Dalgona.). SIL Open Font License1.1; original notice/license preserved in `src/vendor/neodgm-OFL.txt`.
+- Used locally for pixel display typography. No runtime font CDN request.
+
 ## tween.js easing equations
 
 - Upstream: [tweenjs/tween.js](https://github.com/tweenjs/tween.js).
